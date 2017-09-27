@@ -15,6 +15,8 @@ npm install --save auth0-lock-meteor
 ```
 
 ### Server
+Make sure you provide the `AUTH0_CLIENT_ID` and `AUTH0_DOMAIN` environment variables (or put them in `Meteor.settings`).
+
 ```js
 import {Accounts} from 'meteor/accounts-base'
 import 'auth0-lock-meteor/lib/server'
