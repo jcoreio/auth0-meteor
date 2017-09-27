@@ -1,6 +1,6 @@
 {
   "name": "auth0-lock-meteor",
-  "version": "0.0.0-development",
+  "version": "1.0.0",
   "description": "Auth0 Lock integration with Meteor Accounts",
   "main": "lib/index.js",
   "scripts": {
@@ -55,6 +55,7 @@
   "devDependencies": {
     "@jedwards1211/eslint-config": "^1.0.0",
     "@jedwards1211/eslint-config-flow": "^1.0.0",
+    "auth0-lock": "^10.22.0",
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
     "babel-eslint": "^7.1.1",
