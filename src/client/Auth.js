@@ -16,47 +16,34 @@ type AuthResult = {
   idToken?: string,
 }
 
-export default class Auth {
-  webAuth: WebAuth
-  management: Management
+export default class Auth extends WebAuth {
   params: Params
 
   constructor(params: Params) {
+    super(params)
     this.params = params
-    this.webAuth = new WebAuth(params)
-    this.management = new Management(params)
   }
 
-  authorize(options?: Object = {}) {
-    this.webAuth.authorize()
-  }
-
-  handleAuthentication(callback?: (err: ?Error) => any) {
-    this.webAuth.parseHash((err: ?Error, authResult?: AuthResult) => {
-      if (err) {
-        if (callback) callback(err)
-        return
-      }
-      if (!authResult) {
-        if (callback) callback(new Error('missing authResult'))
-        return
-      }
+  handleAuthentication(callback?: (err: ?Error) => any = () => {}) {
+    this.parseHash((err: ?Error, authResult?: AuthResult) => {
+      if (err) return callback(err)
+      if (!authResult) return callback(new Error('missing authResult'))
       const {accessToken, idToken} = authResult
       if (accessToken && idToken) {
-        this.webAuth.client.userInfo(accessToken, (err: ?Error, profile?: Object) => {
-          if (err) {
-            if (callback) callback(err)
-            return
-          }
-          if (!profile) {
-            if (callback) callback(new Error('missing profile'))
-            return
-          }
-          loginWithAuth0({profile, token: accessToken})
-          if (callback) callback(null)
+        this.client.userInfo(accessToken, (err: ?Error, info?: Object) => {
+          if (err) return callback(err)
+          if (!info) return callback(new Error('missing user info'))
+          const {user_id} = info
+          const manage = new Management({domain: this.params.domain, token: idToken})
+          manage.getUser(user_id, (err: ?Error, profile?: Object) => {
+            if (err) return callback(err)
+            if (!profile) return callback(new Error('missing profile'))
+            loginWithAuth0({profile, token: accessToken})
+            if (callback) callback(null)
+          })
         })
       } else {
-        if (callback) callback(new Error('mising accessToken or idToken'))
+        return callback(new Error('mising accessToken or idToken'))
       }
     })
   }
