@@ -15,7 +15,9 @@ function addRolesToLoginHandler(loginHandler) {
     if (user && auth0) {
       const {profile} = auth0
       if (!profile) return user
-      const {roles} = profile
+      const {app_metadata} = profile
+      if (!app_metadata) return user
+      const {roles} = app_metadata
       if (!Array.isArray(roles)) return user
       roles.forEach(role => Roles.addUsersToRoles(user, role, {ifExist: true}))
     }

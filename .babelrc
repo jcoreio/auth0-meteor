@@ -1,6 +1,6 @@
 {
   "presets": ["es2015", "stage-1", "flow"],
-  "plugins": ["transform-runtime", "transform-decorators-legacy", "flow-runtime"],
+  "plugins": ["meteor-imports", "transform-runtime", "transform-decorators-legacy", "flow-runtime"],
   "env": {
     "test": {
       "plugins": ["istanbul"]
