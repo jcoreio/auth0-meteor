@@ -1,7 +1,20 @@
+// @flow
+
+// $FlowFixMe
 import {Meteor} from 'meteor/meteor'
+// $FlowFixMe
 import {Accounts} from 'meteor/accounts-base'
 
-function auth0LoginHandler(options) {
+import type {UserProfile} from '../types'
+
+type Options = {
+  auth0?: {
+    profile?: UserProfile,
+    token?: string,
+  },
+}
+
+function auth0LoginHandler(options: Options): any {
   const {auth0} = options
   if (!auth0) return undefined // Do not handle
 
@@ -15,19 +28,20 @@ function auth0LoginHandler(options) {
     }
   }
 
-  const {profile, token} = auth0
+  const {profile} = auth0
 
   // Do nothing if the profile is not received.
-  if (!profile || !profile.user_id) return null
-
-  // Accounts.updateOrCreateUserFromExternalService
-  // expects the unique user id to be stored in the 'id'
-  // property of serviceData.
-  profile.id = profile.user_id
+  if (!profile) return null
+  const {user_id} = profile
+  if (!user_id) return null
 
   // Run the Accounts method to store the profile and
   // optional data (token) in Meteor users collection.
-  return Accounts.updateOrCreateUserFromExternalService("auth0", profile, token)
+  return Accounts.updateOrCreateUserFromExternalService(
+    "auth0",
+    {...profile, id: user_id},
+    {profile}
+  )
 }
 
 module.exports = auth0LoginHandler

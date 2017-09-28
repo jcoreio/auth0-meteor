@@ -11,7 +11,7 @@ Auth0 integration with Meteor Accounts
 
 ```sh
 meteor add accounts accounts-oauth
-npm install --save auth0-meteor
+npm install --save auth0-js auth0-meteor
 ```
 
 ### Server
@@ -36,5 +36,20 @@ Accounts.registerLoginHandler(addRolesToLoginHandler(auth0LoginHandler))
 ### Client
 ```js
 import Auth from '@jcoreio/auth0-meteor/lib/client/Auth'
+
+const auth = new Auth({
+  clientID: process.env.AUTH0_CLIENT_ID,
+  domain: process.env.AUTH0_DOMAIN,
+  ...
+})
+
+// to begin login, run:
+auth.authorize()
+
+// to logout:
+auth.logout()
+
+// in your callback route, run:
+auth.handleAuthentication()
 ```
 

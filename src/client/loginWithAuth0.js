@@ -3,8 +3,10 @@
 // $FlowFixMe
 import {Accounts} from 'meteor/accounts-base'
 
+import type {UserProfile} from '../types'
+
 export type Options = {
-  profile: Object,
+  profile: UserProfile,
   token: string,
 }
 

@@ -2,8 +2,11 @@
 
 // $FlowFixMe
 import {Meteor} from 'meteor/meteor'
+// $FlowFixMe
 import {WebAuth, Management} from 'auth0-js'
 import loginWithAuth0 from './loginWithAuth0'
+
+import type {UserProfile} from '../types'
 
 export type Params = {
   domain: string,
@@ -30,12 +33,13 @@ export default class Auth extends WebAuth {
       if (!authResult) return callback(new Error('missing authResult'))
       const {accessToken, idToken} = authResult
       if (accessToken && idToken) {
-        this.client.userInfo(accessToken, (err: ?Error, info?: Object) => {
+        this.client.userInfo(accessToken, (err: ?Error, userInfo?: Object) => {
           if (err) return callback(err)
-          if (!info) return callback(new Error('missing user info'))
-          const {user_id} = info
+          if (!userInfo) return callback(new Error('missing userInfo'))
+          const {sub} = userInfo
+          if (!sub) return callback(new Error('missing userInfo.sub'))
           const manage = new Management({domain: this.params.domain, token: idToken})
-          manage.getUser(user_id, (err: ?Error, profile?: Object) => {
+          manage.getUser(sub, (err: ?Error, profile?: UserProfile) => {
             if (err) return callback(err)
             if (!profile) return callback(new Error('missing profile'))
             loginWithAuth0({profile, token: accessToken})

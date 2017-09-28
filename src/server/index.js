@@ -1,5 +1,4 @@
 import {Accounts} from 'meteor/accounts-base'
-import './methods'
 
 Accounts.oauth.registerService('auth0')
 Accounts.addAutopublishFields({
