@@ -1,7 +1,7 @@
 {
-  "name": "@jcoreio/auth0-lock-meteor",
+  "name": "@jcoreio/auth0-meteor",
   "version": "1.0.0",
-  "description": "Auth0 Lock integration with Meteor Accounts",
+  "description": "Auth0 integration with Meteor Accounts",
   "main": "lib/index.js",
   "scripts": {
     "lint": "eslint src test",

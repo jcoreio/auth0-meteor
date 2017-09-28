@@ -3,8 +3,7 @@
 import Auth0Lock from 'auth0-lock'
 // $FlowFixMe
 import {Meteor} from 'meteor/meteor'
-// $FlowFixMe
-import {Accounts} from 'meteor/accounts-base'
+import loginWithAuth0 from './loginWithAuth0'
 
 export default class Lock extends Auth0Lock {
   constructor(clientId: string, domain: string, options?: Object = {}) {
@@ -20,14 +19,7 @@ export default class Lock extends Auth0Lock {
   handleAuthenticated = (token: string) => {
     this.getUserInfo(token, (error: ?Error, profile: ?Object) => {
       if (!error && profile) {
-        Accounts.callLoginMethod({
-          methodArguments: [{
-            auth0: {
-              profile,
-              token
-            }
-          }]
-        })
+        loginWithAuth0({profile, token})
       }
     })
   }
