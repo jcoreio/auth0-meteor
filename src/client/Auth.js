@@ -27,6 +27,10 @@ export default class Auth {
     this.management = new Management(params)
   }
 
+  authorize(options?: Object = {}) {
+    this.webAuth.authorize()
+  }
+
   handleAuthentication(callback?: (err: ?Error) => any) {
     this.webAuth.parseHash((err: ?Error, authResult?: AuthResult) => {
       if (err) {
