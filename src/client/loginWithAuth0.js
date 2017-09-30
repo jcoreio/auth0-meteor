@@ -3,21 +3,13 @@
 // $FlowFixMe
 import {Accounts} from 'meteor/accounts-base'
 
-import type {UserProfile} from '../types'
-
 export type Options = {
-  profile: UserProfile,
-  token: string,
+  idToken: string,
 }
 
-export default function loginWithAuth0({profile, token}: Options) {
+export default function loginWithAuth0({idToken}: Options) {
   Accounts.callLoginMethod({
-    methodArguments: [{
-      auth0: {
-        profile,
-        token
-      }
-    }]
+    methodArguments: [{auth0: {idToken}}]
   })
 }
 
