@@ -1,6 +1,6 @@
 {
   "name": "@jcoreio/auth0-meteor",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Auth0 integration with Meteor Accounts",
   "main": "lib/index.js",
   "scripts": {
@@ -92,6 +92,7 @@
     "jsonwebtoken": "^8.0.1",
     "jwks-rsa": "^1.2.0",
     "lodash.difference": "^4.5.0",
+    "lodash.get": "^4.4.2",
     "lodash.memoize": "^4.1.2"
   }
 }

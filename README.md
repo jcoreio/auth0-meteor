@@ -41,6 +41,26 @@ Accounts.registerLoginHandler(auth0LoginHandler({
 }))
 ```
 
+#### Syncing to user.profile
+
+The following will copy `auth0profile.user_metadata.theme` to `meteorUser.profile.theme` and
+`auth0profile.app_metadata.location` to `meteorUser.profile.location`.
+
+```js
+import auth0LoginHandler from '@jcoreio/auth0-meteor/lib/server/auth0LoginHandler'
+import profileUpdater from '@jcoreio/auth0-meteor/lib/server/profileUpdater'
+
+Accounts.registerLoginHandler(auth0LoginHandler({
+  ...
+  updaters: [profileUpdater({
+    fields: {
+      theme: 'user_metadata.theme',
+      location: 'app_metadata.location',
+    },
+  })]
+}))
+```
+
 ### Client
 ```js
 import Auth from '@jcoreio/auth0-meteor/lib/client/Auth'
@@ -59,5 +79,9 @@ auth.logout()
 
 // in your callback route, run:
 auth.handleAuthentication()
+
+// to subscribe to `services.auth0` data for the logged-in user:
+import {Meteor} from 'meteor/meteor'
+Meteor.subscribe('auth0.userData')
 ```
 
