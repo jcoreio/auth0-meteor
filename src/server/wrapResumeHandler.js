@@ -24,8 +24,9 @@ export default function wrapResumeHandler(params: Params) {
     (auth0UserId: string, callback: (error: ?Error, result?: LoginResult) => any) =>
       loginWithAuth0UserIdAsync(auth0UserId).then(result => callback(null, result), callback)
   )
-  resumeEntry.handler = function resumeWithAuth0(options: LoginHandlerOptions): LoginResult {
-    const result: LoginResult = resumeHandler(options)
+  resumeEntry.handler = function resumeWithAuth0(options: LoginHandlerOptions): ?LoginResult {
+    const result: ?LoginResult = resumeHandler(options)
+    if (!result) return result
     const {error, userId} = result
     if (error) return result
     if (!userId) return {type: 'auth0', error: new Error('Missing userId from resume handler')}
