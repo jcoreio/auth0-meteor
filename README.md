@@ -19,13 +19,17 @@ npm install --save auth0-js auth0-meteor
 import {Accounts} from 'meteor/accounts-base'
 import 'auth0-meteor/lib/server'
 import auth0LoginHandler from '@jcoreio/auth0-meteor/lib/server/auth0LoginHandler'
+import wrapResumeHandler from '@jcoreio/auth0-meteor/lib/server/wrapResumeHandler'
 
-Accounts.registerLoginHandler(auth0LoginHandler({
+const auth0Params = {
   clientId: process.env.AUTH0_MANAGEMENT_CLIENT_ID,
   clientSecret: process.env.AUTH0_MANAGEMENT_CLIENT_SECRET,
   domain: process.env.AUTH0_DOMAIN,
   audience: process.env.AUTH0_FRONTEND_CLIENT_ID,
-}))
+}
+
+Accounts.registerLoginHandler(auth0LoginHandler(auth0Params))
+wrapResumeHandler(auth0Params)
 ```
 
 #### `alanning:roles` v2.0 support
