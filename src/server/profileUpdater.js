@@ -5,6 +5,7 @@ import {Meteor} from 'meteor/meteor'
 import type {UserProfile} from '../types'
 import type {UserUpdater} from './auth0LoginHandler'
 import get from 'lodash.get'
+import size from 'lodash.size'
 
 type Options = {
   fields: {[name: string]: string},
@@ -19,7 +20,10 @@ export default function profileUpdater({fields}: Options = {}): UserUpdater {
       if (value === undefined) $unset[`profile.${key}`] = ''
       else $set[`profile.${key}`] = value
     }
-    Meteor.users.update({_id}, {$set, $unset})
+    const updates = {}
+    if (size($set)) updates.$set = $set
+    if (size($unset)) updates.$unset = $unset
+    if (size(updates)) Meteor.users.update({_id}, updates)
   }
 }
 
