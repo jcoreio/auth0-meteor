@@ -4,6 +4,8 @@
 import {Meteor} from 'meteor/meteor'
 // $FlowFixMe
 import {Accounts} from 'meteor/accounts-base'
+// $FlowFixMe
+import {AuthenticationClient} from 'auth0'
 import jwt from 'jsonwebtoken'
 import createJwksClient from 'jwks-rsa'
 import promisify from 'es6-promisify'
@@ -68,7 +70,7 @@ function createLoginWithAuth0UserId(params: Params): (auth0UserId: string) => Pr
 }
 
 function auth0LoginHandler(params: Params): LoginHandler {
-  const {clientId, clientSecret, domain, updaters, audience} = params
+  const {clientId, clientSecret, domain, updaters} = params
 
   const jwksClient = createJwksClient(params.jwksClientOptions || {
     strictSsl: true,
@@ -93,8 +95,18 @@ function auth0LoginHandler(params: Params): LoginHandler {
       }
     }
 
-    const {idToken} = auth0
-    if (!idToken) return {type: 'auth0', error: new Error('missing idToken')}
+    let {idToken} = auth0
+    let {audience} = params
+
+    if (!idToken) {
+      const {username, password} = auth0
+      if (!username || !password) return {type: 'auth0', error: 'username and password must be given if idToken is not'}
+
+      const authClient = new AuthenticationClient({domain, clientId, clientSecret})
+      idToken = (await authClient.passwordGrant({username, password, client_secret: clientSecret})).id_token
+      if (!idToken) return {type: 'auth0', error: new Error('missing idToken')}
+      audience = clientId
+    }
 
     try {
       const {header, payload} = jwt.decode(idToken, {complete: true})

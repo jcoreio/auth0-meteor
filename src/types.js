@@ -24,8 +24,9 @@ export type LoginResult = {
 
 export type LoginHandlerOptions = {
   auth0?: {
-    accessToken: string,
-    idToken: string,
+    idToken?: string,
+    username?: string,
+    password?: string,
   },
 }
 

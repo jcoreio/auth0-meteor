@@ -87,5 +87,9 @@ auth.handleAuthentication()
 // to subscribe to `services.auth0` data for the logged-in user:
 import {Meteor} from 'meteor/meteor'
 Meteor.subscribe('auth0.userData')
+
+// to log in manually with username/password:
+import loginWithAuth0 from '@jcorieo/auth0-meteor/lib/client/loginWithAuth0'
+loginWithAuth0({username, password}).then(onResolved, onRejected)
 ```
 
