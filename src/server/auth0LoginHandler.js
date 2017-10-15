@@ -103,7 +103,11 @@ function auth0LoginHandler(params: Params): LoginHandler {
       if (!username || !password) return {type: 'auth0', error: 'username and password must be given if idToken is not'}
 
       const authClient = new AuthenticationClient({domain, clientId, clientSecret})
-      idToken = (await authClient.passwordGrant({username, password, client_secret: clientSecret})).id_token
+      try {
+        idToken = (await authClient.passwordGrant({username, password, client_secret: clientSecret})).id_token
+      } catch (error) {
+        return {type: 'auth0', error}
+      }
       if (!idToken) return {type: 'auth0', error: new Error('missing idToken')}
       audience = clientId
     }
