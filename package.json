@@ -1,6 +1,6 @@
 {
   "name": "@jcoreio/auth0-meteor",
-  "version": "3.3.2",
+  "version": "3.3.3",
   "description": "Auth0 integration with Meteor Accounts",
   "main": "lib/index.js",
   "scripts": {
