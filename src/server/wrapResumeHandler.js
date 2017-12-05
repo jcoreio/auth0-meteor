@@ -34,7 +34,8 @@ export default function wrapResumeHandler(params: Params) {
     const auth0UserId = get(user, ['services', 'auth0', 'user_id'])
     if (!auth0UserId) return {type: 'auth0', error: new Error('Missing services.auth0.user_id')}
     try {
-      return loginWithAuth0UserId(auth0UserId)
+      loginWithAuth0UserId(auth0UserId)
+      return result
     } catch (error) {
       return {type: 'auth0', error}
     }
