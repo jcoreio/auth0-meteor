@@ -13,7 +13,8 @@ export default function ensureUserInRoles(
     handleError?: (error: Error) => any,
   } = {}
 ) {
-  const rolesArray = Array.isArray(roles) ? roles : [roles]
+  // Convert superadmin to admin for compatibility with multi tenant apps
+  const rolesArray = (Array.isArray(roles) ? roles : [roles]).map(role => 'superadmin' === role ? 'admin' : role)
 
   const handleError = options.handleError || ((error: Error) => { throw error }) // eslint-disable-line no-console
 
