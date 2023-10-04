@@ -2,7 +2,6 @@
 
 // $FlowFixMe
 import {Meteor} from 'meteor/meteor'
-// $FlowFixMe
 import {WebAuth} from 'auth0-js'
 import loginWithAuth0 from './loginWithAuth0'
 
